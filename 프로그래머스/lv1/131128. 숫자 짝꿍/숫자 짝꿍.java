@@ -1,7 +1,7 @@
 class Solution {
     public String solution(String X, String Y) {
         String answer = "";
-        StringBuilder sb = new StringBuilder(answer);
+        StringBuilder sb = new StringBuilder();
 
         int xArr[] = new int[10];
         int yArr[] = new int[10];
