@@ -8,11 +8,10 @@ class Solution {
             int count = 0;
             for (int j = 1; j * j <= i; j++) {
                 if (j * j == i) {
-                    count++;
+                    num[i - 1]++;
                 }
-                else if (i % j == 0) count += 2;
+                else if (i % j == 0) num[i - 1] += 2;
             }
-            num[i - 1] = count;
         }
         
         for (int i = 0; i < num.length; i++) {
