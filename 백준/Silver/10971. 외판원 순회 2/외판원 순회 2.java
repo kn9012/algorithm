@@ -6,7 +6,10 @@ import java.util.StringTokenizer;
 /**
   * 
   * [문제] 백준 10971번 외판원순회2
-  * [아이디어] 
+  * 1부터 N번까지의 번호가 매겨져 있는 도시가 있을 때 어느 한 도시에서 출발해 N개의 도시를 모두 돌아오는 순회 여행을 하려는데 이때, 한 번 갔던 경로로는 다시 갈 수 없다.
+  * 각 도시간에 이동하는데 드는 비용이 주어질 때, 도시 i에서 j로 갈 수 없는 경우가 있으며 이럴 경우 W[i][j] = 0로 주어지며 여행 최소 비용을 구하여라.
+  * 
+  * [아이디어] 순열을 이용하여 0부터 n-1까지 도시의 순서를 정해주고 i-1번째 도시에서 i번째 도시로 갈 때 드는 비용
   * 
   * @author 김유나
   * 2023-08-30
@@ -18,14 +21,13 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-		n = Integer.parseInt(br.readLine());
+		n = Integer.parseInt(br.readLine()); // 도시 개수
 		
-		arr = new int[n][n];
-		visited = new boolean[n];
-		choiceCity = new int[n];
-		cityNum = new int[n];
+		arr = new int[n][n]; // 각 도시간에 이동하는데 드는 비용 배열
+		visited = new boolean[n]; // 방문 체크 배열
+		choiceCity = new int[n]; // 도시 순서 저장 배열
 		
-		
+		// 입력 받기
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < n; j++) {
@@ -33,9 +35,6 @@ public class Main {
 			}
 		}
 		
-		for (int i = 0; i < n; i++) {
-			cityNum[i] = i;
-		}
 		
 		perm(0);
 		
@@ -58,7 +57,7 @@ public class Main {
 		
 		for (int i = 0; i < n; i++) {
 			if (visited[i]) continue;
-			choiceCity[count] = cityNum[i];
+			choiceCity[count] = i;
 			visited[i] = true;
 			perm(count + 1);
 			visited[i] = false;			
