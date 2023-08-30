@@ -35,7 +35,6 @@ public class Main {
 			}
 		}
 		
-		
 		perm(0);
 		
 		System.out.println(min);
@@ -43,18 +42,19 @@ public class Main {
 	
 	static void perm(int count) {
 		if (count == n) {
-			int sum = 0;
+			int sum = 0; // 비용 합
 			for (int i = 1; i < n; i++) {
-				if (arr[choiceCity[i - 1]][choiceCity[i]] == 0) return;
-				else sum += arr[choiceCity[i - 1]][choiceCity[i]];
+				if (arr[choiceCity[i - 1]][choiceCity[i]] == 0) return; // 0일 경우 종료
+				else sum += arr[choiceCity[i - 1]][choiceCity[i]]; // 0이 아닐 경우 i-1번째 도시에서 i번째 도시로 가는 비용
 			}
 			
-			if (arr[choiceCity[n - 1]][choiceCity[0]] == 0) return;
-			else sum += arr[choiceCity[n - 1]][choiceCity[0]];
-			min = Math.min(sum, min);
+			if (arr[choiceCity[n - 1]][choiceCity[0]] == 0) return; // 0일 경우 종료
+			else sum += arr[choiceCity[n - 1]][choiceCity[0]]; // 0이 아닐 경우 마지막 도시에서 처음 도시로 가는 비용
+			min = Math.min(sum, min); // 최소값 구하기
 			return;
 		}
 		
+		// 순열 구하기
 		for (int i = 0; i < n; i++) {
 			if (visited[i]) continue;
 			choiceCity[count] = i;
