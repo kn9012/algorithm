@@ -12,8 +12,11 @@ import java.util.StringTokenizer;
  * A와 B가 충전 가능한 충전기기 리스트를 만든 후 동시에 충전 가능할때, 둘 중 하나라도 다른 충전기와 충전이 가능하다면 다른 충전기로 충전할 수 있도록 한다.
  * 이때, 중요한 것은 초기 좌표에서도 충전이 가능한지 확인해야하므로 충전 가능 체크를 이동하기 전애 먼저 해준다.
  * 
- * 메모리 : kb
- * 실행 시간 : ms
+ * 주의.. x, y를 잘 확인하기..
+ * 구현은 잘 했으나 평소에 하던 것처럼 x를 행, y를 열로 생각하여 이동할때 이와 같이 이동했다가 몇시간이 걸렸습니다..
+ * 
+ * 메모리 : 22,708kb
+ * 실행 시간 : 129ms
  * 
  * @author 김유나
  * 2023-10-08
@@ -116,6 +119,7 @@ public class Solution {
 		
 		for (int i = 0; i < a; i++) {
 			// A, B가 i번째 BC에서 충전 가능한지 체크 : 충전 가능할 경우 각각의 list에 넣기
+			
 			if (distance(pA.x, BCs[i].p.x, pA.y, BCs[i].p.y) <= BCs[i].c) {
 				listA.add(i);
 			} 
@@ -124,8 +128,8 @@ public class Solution {
 			}
 		}
 		
-		int max = 0;
-		int power = 0;
+		int max = 0; // 최대 처리량
+		int power = 0; // 처리량 저장할 변수
 		
 		// A와 B 모두 1개 이상이라면
 		if (listA.size() > 0 && listB.size() > 0) {
@@ -136,6 +140,7 @@ public class Solution {
 					
 					// a와 b가 같다면 처리량은 절반이 되므로 한번만 더하기
 					if (a == b) power = BCs[a].power;
+					
 					// a와 b가 같지 않다면 a와 b의 처리량 각각 더하기
 					else {
 						power += BCs[a].power;
@@ -149,7 +154,7 @@ public class Solution {
 		
 		// A가 1개 이상이라면
 		else if (listA.size() > 0) {
-			// 접속 가능한 BC 중 최대 처리량 구하기
+			// BC 리스트에서 최대 처리량 구하기
 			for (int a : listA) {
 				max = Math.max(max, BCs[a].power);
 			}
@@ -157,6 +162,7 @@ public class Solution {
 		
 		// B가 1개 이상이라면
 		else if (listB.size() > 0) {
+			// BC 리스트에서 최대 처리량 구하기
 			for (int b : listB) {
 				max = Math.max(max, BCs[b].power);
 			}
