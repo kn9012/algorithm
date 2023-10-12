@@ -1,18 +1,18 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 /**
  * 
+ * [문제] SWEA 1486번 장훈이의 높은 선반
+ * [아이디어] dfs를 이용한 
  * @author SSAFY
  *
  */
 
 public class Solution {
-	static int N, B, min, sum;
+	static int N, B, min;
 	static int arr[], select[];
 	static boolean visited[];
 	public static void main(String[] args) throws IOException {
@@ -33,10 +33,34 @@ public class Solution {
 			}
 
 			min = Integer.MAX_VALUE;
-			dfs(0, 0);
+			visited = new boolean[N];
+			subset(0);
 			
-			System.out.println("#" + t + " " + (min - B));
+			System.out.println("#" + t + " " + min);
 		}
+	}
+	
+	static void subset(int count) {
+		if (count == N) {
+			int sum = 0;
+			for (int i = 0; i < N; i++) {
+				if (visited[i]) {
+					sum += arr[i];
+					if (sum - B > min) return;
+				}
+			}
+			
+			if (sum >= B) {
+				int diff = sum - B;
+				min = Math.min(diff, min);
+			}
+			return;
+		}
+		
+		visited[count] = true;
+		subset(count + 1);
+		visited[count] = false;
+		subset(count + 1);
 	}
 	
 //	static void comb(int X, int start, int count) {
@@ -57,7 +81,7 @@ public class Solution {
 //		}
 //	}
 	
-	static void dfs(int count, int sum) {
+	static void comb(int start, int count, int sum) {
 		if (sum >= B) {
 			min = Math.min(min, sum);
 			return;
@@ -69,8 +93,9 @@ public class Solution {
 			return;
 		}
 		
-		dfs(count + 1, sum + arr[count]);
-		dfs(count + 1, sum);
+		for (int i = start; i < N; i++) {
+			comb(i + 1, count + 1, sum + arr[count]);
+		}
 		
 	}
 }
