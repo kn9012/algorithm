@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +8,7 @@ import java.util.StringTokenizer;
 /**
  * 
  * [문제] SWEA 2105번 디저트 카페
- * [아이디어] DFS 사용
+ * [아이디어] DFS 사용 -> 백트래킹
  * 디저트 수 중복 x -> Set의 contains 사용하여 확인
  * 
  * @author 김유나
@@ -60,7 +59,7 @@ public class Solution {
 					set = new HashSet<Integer>();
 					visit[i][j] = true;
 					set.add(arr[i][j]);
-					dfs(new Point(i, j), 0, new Point(i, j), 1);
+					dfs(new Point(i, j), new Point(i, j), 0, 1);
 									
 				}
 			}
@@ -72,7 +71,7 @@ public class Solution {
 	}
 	
 	// 해당 좌표, 방향, 원래 좌표, count 수
-	static void dfs(Point p, int dir, Point first, int count) {
+	static void dfs(Point p, Point first, int dir, int count) {
 		for (int i = dir; i < 4; i++) {
 			int dx = p.x + deltas[i][0];
 			int dy = p.y + deltas[i][1];
@@ -87,7 +86,7 @@ public class Solution {
 				visit[dx][dy] = true;
 				set.add(arr[dx][dy]);
 				
-				dfs(new Point(dx, dy), i, first, count + 1);
+				dfs(new Point(dx, dy), first, i, count + 1);
 				
 				visit[dx][dy] = false;
 				set.remove(arr[dx][dy]);
