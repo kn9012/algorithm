@@ -10,7 +10,7 @@ class Solution {
         int[] answer = new int[2];
         
         for (int i = 3; i < brown / 2; i++) {
-            for (int j = 1; j < brown / 2; j++) {
+            for (int j = 3; j < brown / 2; j++) {
                 if (i * j == brown + yellow && i + j == brown / 2 + 2) {
                     answer[0] = Math.max(i, j);
                     answer[1] = Math.min(i, j);
