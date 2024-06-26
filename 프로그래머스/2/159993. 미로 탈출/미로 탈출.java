@@ -23,9 +23,8 @@ class Solution {
         }
     }
     
-    boolean visitLever = false;
+    boolean visitLever = false; // 레버 당겼는지 확인 flag
     int end[] = new int[2], lever[] = new int[2];
-    int leverCnt = 0, endCnt = 0;
     int deltas[][] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
     
     public int solution(String[] maps) {
@@ -46,11 +45,11 @@ class Solution {
             }
         }
         
-        leverCnt = bfs(start, lever, maps);
-        endCnt = bfs(lever, end, maps);
+        int leverCnt = bfs(start, lever, maps); // 레버까지의 최단 거리
+        int endCnt = bfs(lever, end, maps); // 출구까지의 최단 거리
         
         if (leverCnt != -1 && endCnt != -1) return leverCnt + endCnt;
-        return -1;
+        return -1; // 레버나 출구에 닿지 못한 경우
     }
     
     public int bfs(int start[], int target[], String[] maps) {
@@ -84,7 +83,7 @@ class Solution {
                 }
             }
         }
-        
+        // 레버나 출구 모두 닿지 못한 경우
         return -1;
     }
 }
