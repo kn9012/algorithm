@@ -72,11 +72,7 @@ class Solution {
                 
                 if (dx < 0 || dy < 0 || dx >= maps.length || dy >= maps[0].length() || isVisited[dx][dy] || maps[dx].charAt(dy) == 'X') continue;
 
-                if (dx == lever[0] && dy == lever[1]) {
-                    visitLever = true;
-                    return cur.cnt + 1;
-                }
-                else if (dx == end[0] && dy == end[1] && visitLever) return cur.cnt + 1;
+                if (dx == target[0] && dy == target[1]) return cur.cnt + 1;
                 else {
                     q.add(new Point(dx, dy, cnt + 1));
                     isVisited[dx][dy] = true;                    
