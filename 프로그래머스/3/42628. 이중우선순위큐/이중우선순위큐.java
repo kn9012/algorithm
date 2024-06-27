@@ -1,8 +1,10 @@
 /**
  * 프로그래머스 이중우선순위큐
  * 
- * 아이디어
- * 
+ * 아이디어 - PriorityQueue 사용
+ * 기본 PriorityQueue는 오름차순(=최소값 우선순위), Colloections.reverseOrder()가 들어간 PriorityQueue는 내림차순(=최댓값 우선순위)
+ * 값을 넣을때마다 두 Queue에 모두 넣어주고 값을 삭제할떄도 같이 삭제헤준다
+ * 빈 큐에 데이터를 삭제하라 하면 해당 연산은 무시하기
  */
 
 import java.util.*;
@@ -12,7 +14,7 @@ class Solution {
         int[] answer = new int[2];
         
         // 최솟값 우선순위
-        PriorityQueue<Integer> asc_queue = new PriorityQueue<Integer>();
+        PriorityQueue<Integer> asc_queue = new PriorityQueue<>();
         
         // 최댓값 우선순위
         PriorityQueue<Integer> desc_queue = new PriorityQueue<>(Collections.reverseOrder());
