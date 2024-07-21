@@ -37,7 +37,7 @@ public class Main {
 					sb.append(stack.peek().height + " ");
 					break;
 				}
-				stack.pop();
+				else stack.pop();
 			}
 
 			if (stack.isEmpty()) sb.append("0 ");
