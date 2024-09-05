@@ -5,23 +5,30 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 백준 14940번 쉬운 최단거리
+ * 
+ * BFS로 최단거리를 구하면 되는데 1인 좌표에서 모든 최단거리를 각각 구해서 계속 메모리 초과가 났다
+ * 그냥 2인 지점에서 시작해서 모든 좌표를 돌면서 2에서부터의 거리를 구해주면 된다
+ * 
+ * 메모리 : kb 시간 : ms
+ */
+
 public class Main {
-	static int[][] arr, distance;
-	static int n, m;
 	static int deltas[][] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-	static boolean[][] isVisited;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuffer sb = new StringBuffer();
 		
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
 		
-		arr = new int[n][m];
-		distance = new int[n][m];
+		int[][] arr = new int[n][m];
+		int[][] distance = new int[n][m];
 		
-		int goalX = 0;
-		int goalY = 0;
+		Queue<int[]> queue = new ArrayDeque<>();
+		boolean[][] isVisited = new boolean[n][m];
 		
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -29,44 +36,37 @@ public class Main {
 				arr[i][j] = Integer.parseInt(st.nextToken());
 				
 				if (arr[i][j] == 2) {
-					goalX = i;
-					goalY = j;
+					queue.add(new int[] {i, j});
+					isVisited[i][j] = true;
 				}
 			}
 		}
 		
-		isVisited = new boolean[n][m];
-		bfs(new int[] {goalX, goalY});
-		
+		while (!queue.isEmpty()) {
+			int cur[] = queue.poll();
+			int X = cur[0];
+			int Y = cur[1];
+			
+			for (int i = 0; i < 4; i++) {
+				int dx = X + deltas[i][0];
+				int dy = Y + deltas[i][1];
+				
+				if (dx >= n || dx < 0 || dy >= m || dy < 0 || isVisited[dx][dy] || arr[dx][dy] == 0) continue;
+				
+				queue.add(new int[] {dx, dy});
+				distance[dx][dy] = distance[X][Y] + 1;
+				isVisited[dx][dy] = true;
+			}
+		}
 		
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				if (distance[i][j] == 0 && arr[i][j] == 1) distance[i][j] = -1;
-				if (arr[i][j] == 2) distance[i][j] = 0;
-				System.out.print(distance[i][j] + " ");
-			} System.out.println();
+				//if (arr[i][j] == 2) distance = 0;
+				sb.append(distance[i][j] + " ");
+			} sb.append("\n");
 		}
-	}
-	
-	public static void bfs(int[] point) {
-		Queue<int[]> queue = new ArrayDeque<>();
-		queue.add(new int[] {point[0], point[1]});
 		
-		while (!queue.isEmpty()) {
-			int cur[] = queue.poll();
-			int dx = cur[0];
-			int dy = cur[1];
-			
-			for (int i = 0; i < 4; i++) {
-				int nx = dx + deltas[i][0];
-				int ny = dy + deltas[i][1];
-				
-				if (nx >= n || nx < 0 || ny >= m || ny < 0 || isVisited[nx][ny] || arr[nx][ny] == 0) continue;
-				
-				queue.add(new int[] {nx, ny});
-				distance[nx][ny] = distance[dx][dy] + 1;
-				isVisited[nx][ny] = true;
-			}
-		}
+		System.out.println(sb);
 	}
 }
