@@ -13,11 +13,11 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		int N = Integer.parseInt(st.nextToken()); // 수열 길이
-		int K = Integer.parseInt(st.nextToken()); // 같은 정수 제한 개수
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
 		
-		int arr[] = new int[N]; // 수열 넣는 배열
-		int num[] = new int[100001]; // 
+		int arr[] = new int[N];
+		int num[] = new int[100001];
 		
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < N; i++) {
@@ -34,8 +34,7 @@ public class Main {
 				end++;
 			}
 			
-			int len = end - start;
-			max = Math.max(max, len);
+			max = Math.max(max, end - start);
 			num[arr[start]]--;
 			start++;
 		}
