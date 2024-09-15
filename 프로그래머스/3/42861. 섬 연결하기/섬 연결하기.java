@@ -17,7 +17,7 @@ class Solution {
         parent = new int[n];
         
         for (int i = 0; i < n; i++) {
-            parent[i] = i;
+            parent[i] = i; // 처음엔 부모 노드를 본인으로 초기화
         }
         
         for (int[] edge : costs) {
@@ -25,12 +25,17 @@ class Solution {
             int to = edge[1];
             int cost = edge[2];
             
+            // 부모 찾기
             int fromParent = findParent(from);
             int toParent = findParent(to);
             
+            // from 부모와 to 부모가 같을 경우 같은 무리에 있는 것이므로 연결하지 않음
             if (fromParent == toParent) continue;
             
+            // 부모가 다를 경우 연결
             answer += cost;
+            
+            // to의 부모를 from의 부모로 변경
             parent[toParent] = fromParent;
         }
         
