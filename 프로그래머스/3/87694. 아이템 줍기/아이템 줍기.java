@@ -14,39 +14,19 @@ class Solution {
         map = new int[102][102];
         isVisited = new boolean[102][102];
         
-        for (int i = 0; i < rectangle.length; i++) {
-            int x1 = rectangle[i][0] * 2;
-            int y1 = rectangle[i][1] * 2;
-            int x2 = rectangle[i][2] * 2;
-            int y2 = rectangle[i][3] * 2;
+        for (int k = 0; k < rectangle.length; k++) {
+            int x1 = rectangle[k][0] * 2;
+            int y1 = rectangle[k][1] * 2;
+            int x2 = rectangle[k][2] * 2;
+            int y2 = rectangle[k][3] * 2;
             
-            // 직사각형 내부 2
-            for (int j = x1 + 1; j < x2; j++) {
-                for (int k = y1 + 1; k < y2; k++) {
-                    map[j][k] = 2;
+            for (int i = x1; i <= x2; i++) {
+                for (int j = y1; j <= y2; j++) {
+                    if (map[i][j] == 2) continue;
+                    map[i][j] = 2;
+                    
+                    if (i == x1 || i == x2 || j == y1 || j == y2) map[i][j] = 1;
                 }
-            }
-            
-            // 직사각형 선 1
-            for (int j = x1; j <= x2; j++) {
-                if (map[j][y1] == 2) continue;
-                else map[j][y1] = 1;
-            }
-            
-            for (int j = x1; j <= x2; j++) {
-                if (map[j][y2] == 2) continue;
-                else map[j][y2] = 1;
-            }
-            
-            
-            for (int j = y1; j <= y2; j++) {
-                if (map[x1][j] == 2) continue;
-                else map[x1][j] = 1;
-            }
-            
-            for (int j = y1; j <= y2; j++) {
-                if (map[x2][j] == 2) continue;
-                else map[x2][j] = 1;
             }
         }
                 
@@ -74,7 +54,7 @@ class Solution {
                 int dx = X + deltas[j][0];
                 int dy = Y + deltas[j][1];
                 
-                if (dx < 0 || dx > 101 || dy < 0 || dy > 101 || isVisited[dx][dy] || map[dx][dy] != 1) continue;
+                if (dx < 0 || dx > 102 || dy < 0 || dy > 102 || isVisited[dx][dy] || map[dx][dy] != 1) continue;
                 
                 queue.add(new int[] {dx, dy, (distance + 1)});
                 isVisited[dx][dy] = true;
