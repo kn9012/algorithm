@@ -1,3 +1,8 @@
+/**
+ * 프로그래머스 순위
+ * - DFS 사용
+ */
+
 import java.util.*;
 class Solution {
     public int solution(int n, int[][] results) {
@@ -21,7 +26,7 @@ class Solution {
         
         for (int i = 0; i < results.length; i++) {
             if (results[i][0] == num && !visited[results[i][1]]) {
-                count = count + winDFS(results[i][1], results, visited) + 1;
+                count += winDFS(results[i][1], results, visited) + 1;
             }
         }
         
@@ -34,7 +39,7 @@ class Solution {
         
         for (int i = 0; i < results.length; i++) {
             if (results[i][1] == num && !visited[results[i][0]]) {
-                count = count + loseDFS(results[i][0], results, visited) + 1;
+                count += loseDFS(results[i][0], results, visited) + 1;
             }
         }
         
