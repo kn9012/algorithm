@@ -16,11 +16,12 @@ class Solution {
         }
         
         while (queue.peek() < K) {
+            // 음식이 하나밖에 없는데 K보다 작다면 -1
             if (queue.size() == 1) {
                 answer = -1;
                 break;
             }
-            // 가장 맵지 않은 음식이랑 두 번째로 맵지 않은 음식 섞어서 새로 추가하기
+            // 가장 맵지 않은 음식이랑 두번째로 맵지 않은 음식 섞어서 새로 추가하기
             int newFood = queue.poll() + (queue.poll() * 2);            
             queue.add(newFood);
             
