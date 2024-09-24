@@ -1,21 +1,18 @@
-/**
- * 프로그래머스 최고의 집합
- */
-
 import java.util.*;
+
 class Solution {
-    public int[] solution (int n, int s) {
-        if (n > s) return new int[] {-1};
-        
-        int [] answer = new int[n];
-        int idx = 0;
-        
-        while (n > 0) {
-            int value = s / n;
-            answer[idx++] = value;
-            s -= value;
-            n--;
+    public List<Integer> solution(int n, int s) {
+        List<Integer> list = new ArrayList<>();
+        int count = 0;
+                
+        while (n > 0 && s / n > 0) {
+                int num = s / n--;
+                list.add(num);
+                s -= num;
         }
-        return answer;
+        
+        if (list.size() == 0) list.add(-1);
+        
+        return list;
     }
 }
