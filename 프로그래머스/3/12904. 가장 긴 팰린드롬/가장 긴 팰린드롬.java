@@ -1,18 +1,17 @@
 /**
  * 프로그래머스 가장 긴 팰린드롬
- * - 투 포인터 cdeaba
+ * - 투 포인터
  */
 
 class Solution {
     public int solution(String s) {
         int answer = 0;
         
-
-        
         for (int i = 0; i < s.length(); i++) {
             int start = i;
             int end = s.length() - 1;
             int len = 0;
+            
             int idx = 1;
             
             while (start < end) {
@@ -31,7 +30,6 @@ class Solution {
             
             answer = Math.max(len, answer);
         }
-        
         
         return answer;
     }
