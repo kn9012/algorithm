@@ -1,54 +1,58 @@
+/**
+ * 프로그래머스 부대복귀
+ * - 처음엔 sources에 있는 값들을 기준으로 BFS 돌았더니 시간 초과 남
+ * - 인접행렬을 만들어 destination에서 BFS를 시작해서 연결된 지역 찾으면 시간초과 안남
+ */
+
 import java.util.*;
 
 class Solution {
-    static boolean isVisited[];
+    int cost[];
+    List<Integer>[] list;
+    
     public int[] solution(int n, int[][] roads, int[] sources, int destination) {
-        int[] answer = new int[sources.length];
-        List<List<Integer>> list = new ArrayList<>();
+        int answer[] = new int[sources.length];
+        list = new List[n + 1];
+        cost = new int[n + 1];
+        
+        Arrays.fill(cost, -1); // 도달하지 못하는 지역은 -1
         
         for (int i = 0; i <= n; i++) {
-            list.add(new ArrayList<>());
+            list[i] = new ArrayList<>();
         }
-        //int[][] arr = new int[n + 1][n + 1];
         
-        for (int i = 0; i < roads.length; i++) {
-            int num1 = roads[i][0];
-            int num2 = roads[i][1];
-            
-            list.get(num1).add(num2);
-            list.get(num2).add(num1);
+        for (int[] road : roads) {
+            list[road[0]].add(road[1]);
+            list[road[1]].add(road[0]);
         }
+        
+        bfs(destination);
         
         for (int i = 0; i < sources.length; i++) {
-            isVisited = new boolean[n + 1];
-            answer[i] = bfs(n, sources[i], destination, list, isVisited);
+            // sources에 있는 지역들만 answer에 넣기
+            answer[i] = cost[sources[i]];
         }
         
         return answer;
     }
     
-    public static int bfs(int n, int num, int destination, List<List<Integer>> list, boolean[] isVisited) {
-        Queue<int []> queue = new ArrayDeque<>();
-        queue.add(new int[] {num, 0});
-        isVisited[num] = true;
-        
+    public void bfs(int start) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.add(start);
+        cost[start] = 0;
+
         while (!queue.isEmpty()) {
-            int cur[] = queue.poll();
-            int curN = cur[0];
-            int curC = cur[1];
+            int cur = queue.poll();
             
-            if (curN == destination) return curC;
-            
-            for (int i = 0; i < list.get(curN).size(); i++) {
-                int next = list.get(curN).get(i);
+            for (int i = 0; i < list[cur].size(); i++) {
+                int next = list[cur].get(i);
                 
-                if (isVisited[next]) continue;
-                
-                queue.add(new int[] {next, curC + 1});
-                isVisited[next] = true;
+                // 아직 갱신되지 않은 지역이면 갱신해주기
+                if (cost[next] == -1) {
+                    queue.add(next);
+                    cost[next] = cost[cur] + 1;
+                }
             }
         }
-        
-        return -1;
-    }
+     }
 }
