@@ -1,7 +1,8 @@
 import java.util.*;
 
 class Solution {
-    public String solution(String[] participant, String[] completion) {        
+    public String solution(String[] participant, String[] completion) {
+        String answer = "";
         HashMap<String, Integer> map = new HashMap<>();
         
         for (String person : participant) {
@@ -12,13 +13,13 @@ class Solution {
         for (String person : completion) {
             int num = map.get(person);
             
-            if (num - 1 > 0) map.put(person, num - 1);
-            else map.remove(person);
+            if (num - 1 >= 0) map.put(person, num - 1);
         }
         
-        Set<String> set = map.keySet();
-        Iterator<String> iter = set.iterator();
+        for (String person : map.keySet()) {
+            if (map.get(person) != 0) answer = person;
+        }
         
-        return iter.next();
+        return answer;
     }
 }
