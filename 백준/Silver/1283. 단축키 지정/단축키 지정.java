@@ -11,7 +11,6 @@ public class Main {
 		
 		int N = Integer.parseInt(br.readLine());
 		Set<String> set = new HashSet<>();
-		
 
 		for (int i = 0; i < N; i++) {
 			boolean isShortcutKey = false;
@@ -33,7 +32,7 @@ public class Main {
 						if (index != 0) index += 1;
 					}
 					
-					System.out.println(str.substring(0, index) + "[" + str.charAt(index) + "]" + str.substring(index + 1));
+					sb.append(str.substring(0, index) + "[" + str.charAt(index) + "]" + str.substring(index + 1) + "\n");
 					break;
 				}
 			}
@@ -47,7 +46,8 @@ public class Main {
 					set.add(s.toUpperCase());
 					set.add(s.toLowerCase());
 					isShortcutKey = true;
-					System.out.println(str.substring(0, j) + "[" + str.charAt(j) + "]" + str.substring(j + 1));
+					
+					sb.append(str.substring(0, j) + "[" + str.charAt(j) + "]" + str.substring(j + 1) + "\n");
 					break;
 				}
 			}
@@ -55,8 +55,9 @@ public class Main {
 			
 			if (isShortcutKey) continue;
 			
-			System.out.println(str);
+			sb.append(str + "\n");
 		}
 		
+		System.out.println(sb);
 	}
 }
