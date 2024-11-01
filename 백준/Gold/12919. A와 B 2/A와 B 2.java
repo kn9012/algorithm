@@ -2,14 +2,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * 백준 12919번 A와 B 2 
- *
- */
-
 public class Main {
-	static boolean isSame = false;
-	static String T, S;
+	static String S, T;
+	static int answer = 0;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		S = br.readLine();
@@ -17,21 +12,20 @@ public class Main {
 		
 		dfs(T);
 		
-		if (!isSame) System.out.println(0);
-		else System.out.println(1);
+		System.out.println(answer);
 	}
 	
-	public static void dfs(String end) {
-		if (end.length() == S.length()) {
-			if (end.equals(S)) {
-				isSame = true;
-				return;
-			}
+	public static void dfs(String t) {
+		if (t.length() == 0) return;
+		if (t.equals(S)) {
+			answer = 1;
 			return;
 		}
-		if (end.charAt(end.length() - 1) == 'A') dfs(end.substring(0, end.length() - 1));
-		if (end.charAt(0) == 'B') {
-			StringBuffer sb = new StringBuffer(end.substring(1));
+		
+		
+		if (t.charAt(t.length() - 1) == 'A') dfs(t.substring(0, t.length() - 1));
+		if (t.charAt(0) == 'B') {
+			StringBuffer sb = new StringBuffer(t.substring(1, t.length()));
 			dfs(sb.reverse().toString());
 		}
 	}
