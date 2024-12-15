@@ -10,18 +10,19 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String str[] = br.readLine().split("-");
-		int sum = Integer.MAX_VALUE;
 		
+		int sum = Integer.MAX_VALUE;
 		for (int i = 0; i < str.length; i++) {
 			String addition[] = str[i].split("\\+");
-			int num = 0;
+			
+			int temp = 0;
 			
 			for (int j = 0; j < addition.length; j++) {
-				num += Integer.parseInt(addition[j]);
+				temp += Integer.parseInt(addition[j]);
 			}
 			
-			if (sum == Integer.MAX_VALUE) sum = num;
-			else sum -= num;
+			if (sum == Integer.MAX_VALUE) sum = temp;
+			else sum -= temp;
 		}
 		
 		System.out.println(sum);
