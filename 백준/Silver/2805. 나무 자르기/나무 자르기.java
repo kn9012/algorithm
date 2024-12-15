@@ -13,14 +13,13 @@ public class Main {
 		
 		int tree[] = new int[N];
 		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
-			tree[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		Arrays.sort(tree);
 		
 		int min = 0;
-		int max = tree[tree.length - 1];
+		int max = 0;
+		for (int i = 0; i < N; i++) {
+			tree[i] = Integer.parseInt(st.nextToken());
+			max = Math.max(max, tree[i]);
+		}
 		
 		while (min <= max) {
 			int mid = (min + max) / 2;
