@@ -1,14 +1,9 @@
 import java.util.*;
 
-/**
- * 프로그래머스 2단계 의상
- * 
- * HashMap 사용
- */
-
 class Solution {
     public int solution(String[][] clothes) {
         int answer = 1;
+        
         Map<String, List<String>> map = new HashMap<>();
         
         for (int i = 0; i < clothes.length; i++) {
@@ -21,7 +16,7 @@ class Solution {
             }
         }
         
-        for (String key: map.keySet()) {
+        for (String key : map.keySet()) {
             answer *= (map.get(key).size() + 1);
         }
         
