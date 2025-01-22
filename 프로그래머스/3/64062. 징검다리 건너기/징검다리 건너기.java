@@ -9,35 +9,34 @@ import java.util.*;
 class Solution {
     public int solution(int[] stones, int k) {
         int answer = 0;
-        int max = Integer.MIN_VALUE;
+        
+        int left = 0;
+        int right = 0;
         
         for (int stone : stones) {
-            max = Math.max(max, stone);
+            left = Math.min(left, stone);
+            right = Math.max(right, stone);
         }
-        
-        int left = 1;
-        int right = max;
         
         while (left <= right) {
             int mid = (left + right) / 2;
             
             int zeroCount = 0;
-            boolean isZero = false;
             
             for (int stone : stones) {
-                if (stone - mid <= 0) zeroCount++;
+                if (stone - mid < 0) zeroCount++;
                 else zeroCount = 0;
                 
-                if (zeroCount >= k) isZero = true;
+                if (zeroCount >= k) break;
             }
             
-            if (isZero) right = mid - 1;
+            if (zeroCount >= k) right = mid - 1;
             else {
-                answer = Math.max(answer, mid);
+                answer = mid;
                 left = mid + 1;
             }
         }
         
-        return answer + 1;
+        return answer;
     }
 }
