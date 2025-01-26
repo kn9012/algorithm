@@ -1,36 +1,35 @@
 import java.util.*;
 
+/**
+ * 프로그래머스 호텔 대실
+ * - 시작 시간을 기준으로 배열 오름차순한 뒤, 우선순위 큐에 끝나는 시간을 넣으면서 비교
+ */
+
 class Solution {
     public int solution(String[][] book_time) {
-        // 예약 시간을 시작 시간 기준으로 정렬
-        Arrays.sort(book_time, (a, b) -> a[0].compareTo(b[0]));
-
-        // 우선순위 큐를 사용하여 끝나는 시간을 관리 (가장 빨리 끝나는 시간이 우선)
-        PriorityQueue<Integer> roomEndTimes = new PriorityQueue<>();
-
-        for (String[] time : book_time) {
-            // 현재 예약의 시작 시간
-            int start = convertToMinutes(time[0]);
-            int end = convertToMinutes(time[1]) + 10; // 청소 시간 포함
-
-            // 현재 예약 시작 시간이 가장 빨리 끝나는 방의 종료 시간 이후라면, 방 재사용 가능
-            if (!roomEndTimes.isEmpty() && roomEndTimes.peek() <= start) {
-                roomEndTimes.poll(); // 기존 방을 제거
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        
+        Arrays.sort(book_time, (o1, o2) -> o1[0].compareTo(o2[0]));
+        
+        for (String times[] : book_time) {
+            int start = changeMin(times[0]);
+            int end = changeMin(times[1]) + 10;
+            
+            if (!queue.isEmpty() && queue.peek() <= start) {
+                queue.poll();
             }
-
-            // 새로운 방 사용 (혹은 기존 방 갱신)
-            roomEndTimes.add(end);
+            
+            queue.add(end);
         }
-
-        // 큐에 남아있는 방 개수가 최소 방 개수
-        return roomEndTimes.size();
+        
+        return queue.size();
     }
-
-    // 시간을 분으로 변환하는 함수
-    private int convertToMinutes(String time) {
-        String[] parts = time.split(":");
-        int hours = Integer.parseInt(parts[0]);
-        int minutes = Integer.parseInt(parts[1]);
-        return hours * 60 + minutes;
+    
+    public int changeMin(String time) {
+        String t[] = time.split(":");
+        int hour = Integer.parseInt(t[0]) * 60;
+        int min = Integer.parseInt(t[1]);
+        
+        return hour + min;
     }
 }
