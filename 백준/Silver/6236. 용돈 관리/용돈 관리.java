@@ -16,7 +16,7 @@ public class Main {
 		
 		int money[] = new int[N];
 		int left = 1;
-		int right = 1;
+		int right = 0;
 		
 		for (int i = 0; i < N; i++) {
 			money[i] = Integer.parseInt(br.readLine());
