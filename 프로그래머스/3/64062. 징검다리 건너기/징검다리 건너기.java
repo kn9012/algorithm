@@ -1,21 +1,18 @@
 /**
  * 프로그래머스 징검다리 건너기
- * - 한 번에 건너뛸 수 있는 디딤돌의 최대 칸수 : k -> 0이 k-1개 연속으로 나와야 함
- * - 이분 탐색
+ * - 매개 변수 탐색
  */
-
-import java.util.*;
 
 class Solution {
     public int solution(int[] stones, int k) {
         int answer = 0;
         
-        int left = 0;
-        int right = 0;
+        int left = Integer.MAX_VALUE;
+        int right = Integer.MIN_VALUE;
         
-        for (int stone : stones) {
-            left = Math.min(left, stone);
-            right = Math.max(right, stone);
+        for (int i = 0; i < stones.length; i++) {
+            left = Math.min(left, stones[i]);
+            right = Math.max(right, stones[i]);
         }
         
         while (left <= right) {
