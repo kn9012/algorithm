@@ -23,7 +23,7 @@ public class Main {
 		int arr[] = new int[N + 1];
 		
 		PriorityQueue<Integer> queue = new PriorityQueue<>();
-		List<Integer> list[] = new ArrayList[N + 1];
+		List<Integer>[] list = new ArrayList[N + 1];
 		
 		for (int i = 0; i <= N; i++) {
 			list[i] = new ArrayList<>();
@@ -47,8 +47,7 @@ public class Main {
 			int cur = queue.poll();
 			sb.append(cur + " ");
 			
-			for (int i = 0; i < list[cur].size(); i++) {
-				int node = list[cur].get(i);
+			for (Integer node : list[cur]) {
 				arr[node]--;
 				
 				if (arr[node] == 0) queue.add(node);
