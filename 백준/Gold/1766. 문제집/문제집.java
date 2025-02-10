@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -16,43 +15,46 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
 		
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		
-		int indegree[] = new int[N + 1];
-		List<List<Integer>> list = new ArrayList<List<Integer>>();
+		int arr[] = new int[N + 1];
+		
+		PriorityQueue<Integer> queue = new PriorityQueue<>();
+		List<Integer> list[] = new ArrayList[N + 1];
+		
 		for (int i = 0; i <= N; i++) {
-			list.add(new ArrayList<Integer>());
+			list[i] = new ArrayList<>();
 		}
 		
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int v1 = Integer.parseInt(st.nextToken());
-			int v2 = Integer.parseInt(st.nextToken());
-			
-			list.get(v1).add(v2);
-			indegree[v2]++;
-		}
+			int n1 = Integer.parseInt(st.nextToken());
+			int n2 = Integer.parseInt(st.nextToken());
 		
-		PriorityQueue<Integer> queue = new PriorityQueue<>();
+			arr[n2]++;
+			list[n1].add(n2);
+		}
 		
 		for (int i = 1; i <= N; i++) {
-			if (indegree[i] == 0) {
-				queue.add(i);
+			if (arr[i] == 0) queue.add(i);
+		}
+		
+		
+		while (!queue.isEmpty()) {
+			int cur = queue.poll();
+			sb.append(cur + " ");
+			
+			for (int i = 0; i < list[cur].size(); i++) {
+				int node = list[cur].get(i);
+				arr[node]--;
+				
+				if (arr[node] == 0) queue.add(node);
 			}
 		}
 		
-		while (!queue.isEmpty()) {
-			int node = queue.poll();
-			
-			for (Integer i : list.get(node)) {
-				indegree[i]--;
-				
-				if (indegree[i] == 0) queue.add(i);
-			}
-			
-			System.out.print(node + " ");
-		}
+		System.out.println(sb);
 	}
 }
