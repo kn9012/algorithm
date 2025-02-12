@@ -48,7 +48,7 @@ public class Main {
 		int size = queue.size();
 		int sum = 0;
 		
-		for (int i = 0; i < size; i++) {
+		while (!queue.isEmpty()) {
 			Node node = queue.poll();
 			
 			int to = find(node.to);
