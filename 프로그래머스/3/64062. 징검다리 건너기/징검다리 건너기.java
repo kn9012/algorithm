@@ -1,6 +1,7 @@
 /**
  * 프로그래머스 징검다리 건너기
- * - 매개 변수 탐색
+ * - 매개변수 탐색
+ * - 0이 k-1개 연속으로 나와야 건널 수 있음
  */
 
 class Solution {
@@ -10,30 +11,29 @@ class Solution {
         int left = Integer.MAX_VALUE;
         int right = Integer.MIN_VALUE;
         
-        for (int i = 0; i < stones.length; i++) {
-            left = Math.min(left, stones[i]);
-            right = Math.max(right, stones[i]);
+        for (int stone : stones) {
+            left = Math.min(left, stone);
+            right = Math.max(right, stone);
         }
         
         while (left <= right) {
-            int mid = (left + right) / 2;
+            int mid = left + (right - left) / 2;
             
             int zeroCount = 0;
             
             for (int stone : stones) {
-                if (stone - mid < 0) zeroCount++;
+                if (stone - mid <= 0) zeroCount++;
                 else zeroCount = 0;
                 
                 if (zeroCount >= k) break;
             }
             
-            if (zeroCount >= k) right = mid - 1;
-            else {
-                answer = mid;
+            if (zeroCount < k) {
+                answer = Math.max(answer, mid);
                 left = mid + 1;
-            }
+            } else right = mid - 1;
         }
-        
-        return answer;
+            
+        return left;
     }
 }
