@@ -1,6 +1,6 @@
 /**
  * 프로그래머스 합승 택시 요금
- * - 다익스트라!!!!
+ * - 다익스트라
  */
 
 import java.util.*;
@@ -15,20 +15,17 @@ class Solution {
         }
         
         @Override
-        public int compareTo(Node o) {
-            return Integer.compare(this.value, o.value);
+        public int compareTo(Node other) {
+            return Integer.compare(this.value, other.value);
         }
     }
     
     List<Node> list[];
     int[] dist;
-    int len;
     
     public int solution(int n, int s, int a, int b, int[][] fares) {
-        len = n;
-        
         list = new ArrayList[n + 1];
-        for (int i = 0; i <= n; i++) {
+        for (int i = 1; i <= n; i++) {
             list[i] = new ArrayList<>();
         }
         
@@ -37,28 +34,29 @@ class Solution {
             list[fares[i][1]].add(new Node(fares[i][0], fares[i][2]));
         }
         
-        int[] together = dijkstra(s);
-        int[] aloneA = dijkstra(a);
-        int[] aloneB= dijkstra(b);
-        int cost = Integer.MAX_VALUE;
+        int[] together = dijkstra(s, n);
+        int[] aloneA = dijkstra(a, n);
+        int[] aloneB = dijkstra(b, n);
+        
+        int charge = Integer.MAX_VALUE;
         
         for (int i = 1; i <= n; i++) {
             if (together[i] == Integer.MAX_VALUE || aloneA[i] == Integer.MAX_VALUE || aloneB[i] == Integer.MAX_VALUE) continue;
-            
-            cost = Math.min(cost, together[i] + aloneA[i] + aloneB[i]);
+                
+            charge = Math.min(charge, together[i] + aloneA[i] + aloneB[i]);
         }
         
-        return cost;
+        return charge;
     }
     
-    public int[] dijkstra(int s) {
-        dist = new int[len + 1];
+    public int[] dijkstra(int s, int n) {
+        dist = new int[n + 1];
         Arrays.fill(dist, Integer.MAX_VALUE);
         dist[s] = 0;
         
-        PriorityQueue<Node> queue = new PriorityQueue<>();
+        PriorityQueue<Node> queue = new PriorityQueue();
         queue.add(new Node(s, 0));
-
+        
         while (!queue.isEmpty()) {
             Node cur = queue.poll();
             int node = cur.node;
