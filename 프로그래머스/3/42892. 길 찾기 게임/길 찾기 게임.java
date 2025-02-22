@@ -1,46 +1,40 @@
-/**
- * 프로그래머스 길 찾기 게임
- * - 각 노드들의 부모/자식을 정해준 뒤 전위, 후위 순회
- */
-
 import java.util.*;
 
 class Solution {
     class Node {
-        int x, y, n;
+        int x, y, v;
+        
         Node left, right;
         
-        Node(int x, int y, int n) {
+        Node (int x, int y, int v) {
             this.x = x;
             this.y = y;
-            this.n = n;
+            this.v = v;
         }
     }
     
-    List<Node> list;
+    List<Node> nodes = new ArrayList<>();
     int[][] answer;
     int count = 0;
     
     public int[][] solution(int[][] nodeinfo) {
         int size = nodeinfo.length;
         
-        answer = new int[2][size];
-        list = new ArrayList<>();
-        
         for (int i = 0; i < size; i++) {
-            list.add(new Node(nodeinfo[i][0], nodeinfo[i][1], i + 1));
+            nodes.add(new Node(nodeinfo[i][0], nodeinfo[i][1], i + 1));
         }
         
-        Collections.sort(list, (o1, o2) -> {
-            return o2.y - o1.y;
+        Collections.sort(nodes, (o1, o2) -> {
+            return Integer.compare(o2.y, o1.y);
         });
         
-        Node root = list.get(0); // 루트 노드
+        Node root = nodes.get(0);
         
         for (int i = 1; i < size; i++) {
-            find(root, list.get(i));
+            find(root, nodes.get(i));
         }
         
+        answer = new int[2][size];
         pre(root);
         count = 0;
         post(root);
@@ -49,32 +43,28 @@ class Solution {
     }
     
     public void find(Node parent, Node child) {
-        // 왼쪽 자식
         if (parent.x > child.x) {
             if (parent.left == null) parent.left = child;
             else find(parent.left, child);
-        } else { // 오른쪽 자식
+        } else {
             if (parent.right == null) parent.right = child;
             else find(parent.right, child);
         }
     }
     
-    // 전위 순회
-    public void pre(Node cur) {
-        if (cur != null) {
-            answer[0][count++] = cur.n;
-            pre(cur.left);
-            pre(cur.right);
+    public void pre(Node root) {
+        if (root != null) {
+            answer[0][count++] = root.v;
+            pre(root.left);
+            pre(root.right);
         }
-        
     }
     
-    // 후위 순회
-    public void post(Node cur) {
-        if (cur != null) {
-            post(cur.left);
-            post(cur.right);
-            answer[1][count++] = cur.n;
+    public void post(Node root) {
+        if (root != null) {
+            post(root.left);
+            post(root.right);
+            answer[1][count++] = root.v;
         }
     }
 }
