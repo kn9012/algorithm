@@ -3,7 +3,7 @@ class Solution {
         int playTime = changeToSec(play_time);
         int advTime = changeToSec(adv_time);
         
-        int[] prefixSum = new int[99 * 3600 + 59 * 60 + 60];
+        int[] prefixSum = new int[playTime];
         
         for (String log : logs) {
             String[] l = log.split("-");
