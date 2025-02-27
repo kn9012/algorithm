@@ -1,45 +1,35 @@
-/**
- * 프로그래머스 광고 삽입
- * - 초로 변경
- * - 구간합, 누적합, 슬라이딩 윈도우
- */
-
-import java.util.*;
-
 class Solution {
     public String solution(String play_time, String adv_time, String[] logs) {
-        PriorityQueue<String> queue = new PriorityQueue<>();
-        
-        long playTime = changeToSec(play_time);
+        int playTime = changeToSec(play_time);
         int advTime = changeToSec(adv_time);
         
-        int[] sum = new int[99 * 60 * 60 + 59 * 60 + 59];
+        int[] prefixSum = new int[99 * 3600 + 59 * 60 + 60];
         
         for (String log : logs) {
-            String[] times = log.split("-");
-            int start = changeToSec(times[0]);
-            int end = changeToSec(times[1]);
+            String[] l = log.split("-");
+            
+            int start = changeToSec(l[0]);
+            int end = changeToSec(l[1]);
             
             for (int i = start; i < end; i++) {
-                sum[i]++;
+                prefixSum[i]++;
             }
         }
         
-        long s = 0;
-        long ms = 0;
+        long sum = 0;
         long maxTime = 0;
         
         for (int i = 0; i < advTime; i++) {
-            s += sum[i];
+            sum += prefixSum[i];
         }
         
-        ms = s;
+        long maxSum = sum;
         
         for (int i = advTime; i < playTime; i++) {
-            s += sum[i] - sum[i - advTime];
+            sum += prefixSum[i] - prefixSum[i - advTime];
             
-            if (s > ms) {
-                ms = s;
+            if (sum > maxSum) {
+                maxSum = sum;
                 maxTime = i - advTime + 1;
             }
         }
@@ -49,9 +39,12 @@ class Solution {
     
     public int changeToSec(String time) {
         String[] times = time.split(":");
-        int hour = Integer.parseInt(times[0]) * 60 * 60;
+        
+        int hour = Integer.parseInt(times[0]) * 3600;
         int min = Integer.parseInt(times[1]) * 60;
-        return hour + min + Integer.parseInt(times[2]);
+        int sec = Integer.parseInt(times[2]);
+        
+        return hour + min + sec;
     }
     
     public String changeToString(long time) {
@@ -62,6 +55,7 @@ class Solution {
         String h = (hour < 10 ? "0" + hour : hour + "");
         String m = (min < 10 ? "0" + min : min + "");
         String s = (sec < 10 ? "0" + sec : sec + "");
+        
         return h + ":" + m + ":" + s;
     }
 }
