@@ -1,83 +1,78 @@
 class Solution {
-    
-    boolean[][] pillar;
-    boolean[][] bar;
-    
+    int[][][] map;
+
     public int[][] solution(int n, int[][] build_frame) {
-        pillar = new boolean[n + 1][n + 1];
-        bar = new boolean[n + 1][n + 1];
-        
+        map = new int[n + 1][n + 1][2];
+
+        for (int[] frame : build_frame) {
+            int x = frame[0];
+            int y = frame[1];
+            int type = frame[2];
+            int work = frame[3];
+
+            if (type == 0) { // 기둥
+                if (work == 1) { // 설치
+                    if (isPillarValid(x, y, n)) {
+                        map[x][y][0] = 1;
+                    }
+                } else { // 삭제
+                    map[x][y][0] = 0;
+                    if (!canDelete(n)) map[x][y][0] = 1;
+                }
+            } else { // 보
+                if (work == 1) { // 설치
+                    if (isBeamValid(x, y, n)) {
+                        map[x][y][1] = 1;
+                    }
+                } else { // 삭제
+                    map[x][y][1] = 0;
+                    if (!canDelete(n)) map[x][y][1] = 1;
+                }
+            }
+        }
+
         int count = 0;
-        for(int i = 0; i < build_frame.length; i++) {
-            int x = build_frame[i][0];
-            int y = build_frame[i][1];
-            int type = build_frame[i][2];
-            int action = build_frame[i][3];
-            
-            if(type == 0) { //기둥을
-                if(action == 1) { //설치한다
-                    if(checkPillar(x, y)) {
-                        pillar[x][y] = true;
-                        count++;
-                    }  
-                } else { //삭제한다
-                    pillar[x][y] = false;
-                    if(canDelete(n) == false) pillar[x][y] = true;
-                    else count--;
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (map[i][j][0] == 1) count++;
+                if (map[i][j][1] == 1) count++;
+            }
+        }
+
+        int[][] answer = new int[count][3];
+        int index = 0;
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (map[i][j][0] == 1) {
+                    answer[index++] = new int[]{i, j, 0};
                 }
-            } else { //보를
-                if(action == 1) {
-                    if(checkBar(x, y)) { //설치한다
-                        bar[x][y] = true;
-                        count++;
-                    } 
-                } else { //삭제한다
-                    bar[x][y] = false;
-                    if(canDelete(n) == false) bar[x][y] = true;
-                    else count--;
+                if (map[i][j][1] == 1) {
+                    answer[index++] = new int[]{i, j, 1};
                 }
             }
         }
-        
-        int[][] result = new int[count][3];
-        int idx = 0;
-        for(int i = 0; i <= n; i++) {
-            for(int j = 0; j <= n; j++) {
-                if(pillar[i][j]) {
-                    result[idx][0] = i;
-                    result[idx][1] = j; 
-                    result[idx++][2] = 0;
-                }
-                if(bar[i][j]) {
-                    result[idx][0] = i;
-                    result[idx][1] = j;
-                    result[idx++][2] = 1;
-                }
-            }
-        }
-        return result;
+
+        return answer;
     }
-    
-    public boolean canDelete(int n) {    
-        for(int i = 0; i <= n; i++) { 
-            for(int j = 0; j <= n; j++) { 
-                if(pillar[i][j] && checkPillar(i, j) == false)  return false; // 기둥이 해당 위치에 있을 수 없다면 false 
-                else if(bar[i][j] && checkBar(i, j) == false) return false; // 바닥이 해당 위치에 있을 수 없다면 false 
+
+    public boolean isPillarValid(int x, int y, int n) {
+        return y == 0 || (y > 0 && map[x][y - 1][0] == 1) || 
+               (x > 0 && map[x - 1][y][1] == 1) || map[x][y][1] == 1;
+    }
+
+    public boolean isBeamValid(int x, int y, int n) {
+        return (y > 0 && map[x][y - 1][0] == 1) || (y > 0 && map[x + 1][y - 1][0] == 1) ||
+               (x > 0 && map[x - 1][y][1] == 1 && map[x + 1][y][1] == 1);
+    }
+
+    public boolean canDelete(int n) {
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (map[i][j][0] == 1 && !isPillarValid(i, j, n)) return false;
+                if (map[i][j][1] == 1 && !isBeamValid(i, j, n)) return false;
             }
         }
         return true;
-    }
-    
-    public boolean checkPillar(int x, int y) {
-        if(y == 0) return true; //바닥에 설치하는 경우
-        else if(y > 0 && pillar[x][y - 1]) return true; //아래 기둥이 있는 경우
-        else if(x > 0 && bar[x - 1][y] || bar[x][y]) return true;
-        return false;
-    }
-    
-    public boolean checkBar(int x, int y) {
-        if(y > 0 && pillar[x][y - 1] || pillar[x + 1][y - 1]) return true; // 한쪽 끝에 기둥이 있는 경우
-        else if(x > 0 && bar[x - 1][y] && bar[x + 1][y]) return true; //양쪽 끝이 보와 동시에 연결되어 있는 경우
-        return false;
     }
 }
