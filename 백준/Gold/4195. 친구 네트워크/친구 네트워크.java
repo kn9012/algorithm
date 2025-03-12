@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -11,6 +9,7 @@ import java.util.StringTokenizer;
  * 백준 4195번 친구 네트워크
  * - Union Find
  */
+
 public class Main {
 	public static int[] parent, size;
 	
@@ -61,7 +60,6 @@ public class Main {
 	
 	public static int find(int f) {
 		if (parent[f] == f) return f;
-		
 		return parent[f] = find(parent[f]);
 	}
 	
