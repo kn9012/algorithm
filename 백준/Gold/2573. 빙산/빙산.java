@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -27,8 +26,8 @@ public class Main {
 		N = Integer.parseInt(st.nextToken()); // 3 <= N <= 300
 		M = Integer.parseInt(st.nextToken()); // 3 <= M <= 300
 		
-		iceberg = new int[N][M];
-		icebergs = new ArrayList<>();
+		iceberg = new int[N][M]; // 빙산 높이 저장할 배열
+		icebergs = new ArrayList<>(); // 높이가 0이 아닌 빙산 저장할 리스트
 		
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -56,27 +55,21 @@ public class Main {
 			
 			
 			meltIceberg();
-			year++;
-			
-//			for (int i = 0; i < N; i++) {
-//				for (int j = 0; j < M; j++) {
-//					System.out.print(iceberg[i][j] + " ");
-//				} System.out.println();
-//			} System.out.println();
-			
-			
+			year++;			
 		}
 	}
+	
+	// 빙산 녹이기
 	
 	public static void meltIceberg() {
 		List<int []> newIcebergs = new ArrayList<>();
 		int[][] newIceberg = new int[N][M];
+		
 		for (int i = 1; i < N - 1; i++) {
 			for (int j = 1; j < M - 1; j++) {
 				newIceberg[i][j] = iceberg[i][j];
 			}
 		}
-		
 		
 		for (int[] ib : icebergs) {
 			int x = ib[0];
@@ -88,26 +81,22 @@ public class Main {
                 int dx = x + deltas[i][0];
                 int dy = y + deltas[i][1];
 
-                if (dx >= 0 && dy >= 0 && dx < N && dy < M && iceberg[dx][dy] == 0) {
-                	
-                    waterCount++;
-                }
+                if (dx >= 0 && dy >= 0 && dx < N && dy < M && iceberg[dx][dy] == 0) waterCount++;
             }
             
-            //System.out.println(x + " " + y + " " + waterCount);
             if (newIceberg[x][y] > waterCount) {
             	newIceberg[x][y] -= waterCount;
                 newIcebergs.add(new int[]{x, y});
-            } else {
-            	newIceberg[x][y] = 0;
-            }
+            } else newIceberg[x][y] = 0;
 		}
 
+		// 배열, 리스트 복사하기
         icebergs = newIcebergs;
         iceberg = newIceberg;
 	}
 	
-	// 두 덩어리 이상으로 분리되는지 확인 메소드
+	// 두 덩어리 이상으로 분리되는지 확인하는 메소드
+	
 	public static boolean isSeperate() {
 		int count = 0;
 		
@@ -125,6 +114,7 @@ public class Main {
 	}
 	
 	// 연결된 덩어리 탐색 메소드
+	
 	public static void bfs(int x, int y) {
 		Queue<int[]> queue = new ArrayDeque<>();
 		queue.add(new int[] {x, y});
