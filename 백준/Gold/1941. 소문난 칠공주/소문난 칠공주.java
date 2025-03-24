@@ -8,21 +8,19 @@ import java.util.Queue;
 
 /**
  * 백준 1941번 소문난 칠공주
- * S가 있을 때 S가 4개 이상 포함된 칠공주가 되는지 DFS 탐색?
+ * 조합 + BFS 탐색
  */
 
 public class Main {
 	public static String[][] seats;
 	public static int answer = 0;
 	public static int[][] deltas = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-	public static boolean[] selected;
 	public static List<Integer> princess;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		seats = new String[5][5];
 		princess = new ArrayList<>();
-		selected = new boolean[25];
 		
 		for (int i = 0; i < 5; i++) {
 			seats[i] = br.readLine().split("");
@@ -35,19 +33,15 @@ public class Main {
 	
 	public static void comb(int count, int start) {
 		if (count == 7) {
-			if (isValid(princess)) {
-				answer++;
-			}
-			
+			if (isValid(princess)) answer++;
 			return;
 		}
 		
+		// 5x5 2차원 배열을 0부터 24로 설정
 		for (int i = start; i < 25; i++) {
-			selected[i] = true;
 			princess.add(i);
 			comb(count + 1, i + 1);
 			princess.remove(princess.size() - 1);
-			selected[i] = false;
 		}
 	}
 	
@@ -68,7 +62,6 @@ public class Main {
 			int[] cur = queue.poll();
 			int x = cur[0];
 			int y = cur[1];
-			
 			
 			for (int i = 0; i < 4; i++) {
 				int dx = x + deltas[i][0];
