@@ -44,7 +44,7 @@ public class Main {
 				}
 			}
 			
-			for (int i = 0; i < M; ++i) {
+			for (int i = 0; i < M; i++) {
 				done = new boolean[N + 1];
 				if (dfs(i)) answer += 1;
 			}
