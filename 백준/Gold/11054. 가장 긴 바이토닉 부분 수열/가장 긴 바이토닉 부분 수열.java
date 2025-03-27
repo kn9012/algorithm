@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,7 +23,7 @@ public class Main {
 		int[] dp1 = new int[N]; // 왼 -> 오
 		int[] dp2 = new int[N]; // 오 -> 왼
 		
-		int answer = 0;
+		int answer = 1;
 		
 		dp1[0] = 1;
 		for (int i = 1; i < N; i++) {
@@ -32,7 +31,7 @@ public class Main {
 			for (int j = 0; j < i; j++) {
 				if (nums[i] > nums[j]) {
 					dp1[i] = Math.max(dp1[i], dp1[j] + 1);
-					answer = Math.max(answer, dp1[i]);
+					//answer = Math.max(answer, dp1[i]);
 				}
 			}
 		}
@@ -43,7 +42,7 @@ public class Main {
 			for (int j = N - 1; j > i; j--) {
 				if (nums[i] > nums[j]) {
 					dp2[i] = Math.max(dp2[i], dp2[j] + 1);
-					answer = Math.max(answer, dp2[i]);
+					//answer = Math.max(answer, dp2[i]);
 				}
 			}
 		}
