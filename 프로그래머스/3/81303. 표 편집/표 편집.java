@@ -5,8 +5,6 @@ class Solution {
         int[] prev = new int[n];
         int[] next = new int[n];
         
-        Stack<Integer> stack = new Stack<>();
-        
         for (int i = 0; i < n; i++) {
             prev[i] = i - 1;
             next[i] = i + 1;
@@ -14,36 +12,39 @@ class Solution {
         
         next[n - 1] = -1;
         
+        Stack<Integer> removed = new Stack<>();
+        
         for (String c : cmd) {
-            String command = c.substring(0, 1);
+            char command = c.charAt(0);
             
-            if (command.equals("U")) {
-                int X = Integer.parseInt(c.substring(2));
-                while (X-- > 0) k = prev[k];
-            } else if (command.equals("D")) {
-                int X = Integer.parseInt(c.substring(2));
-                while (X-- > 0) k = next[k];
-            } else if (command.equals("C")) {
-                stack.push(k);
+            if (command == 'U') {
+                int move = Integer.parseInt(c.substring(2));
+                while (move-- > 0) k = prev[k];
+            } else if (command == 'D') {
+                int move = Integer.parseInt(c.substring(2));
+                while (move-- > 0) k = next[k];
+            } else if (command == 'C') {
+                removed.push(k);
                 
-                if (next[k] != -1) prev[next[k]] = prev[k];
                 if (prev[k] != -1) next[prev[k]] = next[k];
+                if (next[k] != -1) prev[next[k]] = prev[k];
                 
                 k = (next[k] != -1) ? next[k] : prev[k];
             } else {
-                int K = stack.pop();
+                int z = removed.pop();
                 
-                if (prev[K] != -1) next[prev[K]] = K;
-                if (next[K] != -1) prev[next[K]] = K;
+                if (prev[z] != -1) next[prev[z]] = z;
+                if (next[z] != -1) prev[next[z]] = z;
             }
         }
         
         StringBuilder sb = new StringBuilder("O".repeat(n));
         
-        while (!stack.isEmpty()) {
-            sb.setCharAt(stack.pop(), 'X');
+        while (!removed.isEmpty()) {
+            sb.setCharAt(removed.pop(), 'X');
         }
         
         return sb.toString();
     }
 }
+
