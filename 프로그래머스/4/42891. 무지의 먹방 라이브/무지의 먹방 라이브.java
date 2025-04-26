@@ -1,59 +1,47 @@
 import java.util.*;
 
-/**
- * 프로그래머스 무지의 먹방 라이브
- * - 시간 순서로 정렬 후 사이클로 계산
- */
-
 class Solution {
-    class Food implements Comparable<Food> {
+    class Food {
         int index, time;
         
         Food (int index, int time) {
             this.index = index;
             this.time = time;
         }
-        
-        @Override
-        public int compareTo(Food o) {
-            return Integer.compare(this.time, o.time);
-        }
     }
     
     public int solution(int[] food_times, long k) {
-        PriorityQueue<Food> queue = new PriorityQueue<>();
-        
+        PriorityQueue<Food> pq = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.time, o2.time));
         for (int i = 0; i < food_times.length; i++) {
-            queue.add(new Food(i + 1, food_times[i]));
+            pq.add(new Food(i, food_times[i]));
         }
         
-        long sum = 0;
         long prevTime = 0;
         
-        while (!queue.isEmpty()) {
-            Food cur = queue.peek();
+        while (!pq.isEmpty()) {
+            int size = pq.size();
             
-            long total = (long) (cur.time - prevTime) * queue.size();
+            Food first = pq.peek();
             
-            if (sum + total <= k) {
-                sum += total;
-                queue.poll();
-                prevTime = cur.time;
-            } else {
-                k -= sum;
-                break;
-            }
+            if (k - (size * (long) (first.time - prevTime)) >= 0) {
+                k -= size * (long) (first.time - prevTime);
+                
+                prevTime = first.time;
+                pq.poll();
+                //System.out.println(k);
+            } else break;
         }
         
-        if (queue.isEmpty()) return -1;
-        
         List<Food> list = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            list.add(queue.poll());
+        
+        if (pq.isEmpty()) return -1;
+        
+        while (!pq.isEmpty()) {
+            list.add(pq.poll());
         }
         
         Collections.sort(list, (o1, o2) -> Integer.compare(o1.index, o2.index));
         
-        return list.get((int) (k % list.size())).index;
+        return list.get((int) (k % list.size())).index + 1;
     }
 }
