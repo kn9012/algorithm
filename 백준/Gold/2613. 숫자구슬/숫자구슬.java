@@ -29,11 +29,11 @@ public class Main {
 		for (int i = 0; i < N; i++) {
 			num[i] = Integer.parseInt(st.nextToken());
 			
-			left = Math.max(left, num[i]);
-			right += num[i];
+			left = Math.max(left, num[i]); // 구슬 중 가장 큰 값
+			right += num[i]; // 모든 구슬 값의 합
 		}
 		
-		binarySearch();
+		binarySearch(); // 매개 변수 탐색
 		printGroupSize();
 	}
 	
@@ -41,8 +41,9 @@ public class Main {
 		while (left <= right) {
 			int mid = left + (right - left) / 2;
 		
-			int count = countBundle(mid);
-			if (count > M) {
+			int group = countBeadGroup(mid);
+			
+			if (group > M) {
 				left = mid + 1;
 			} else {
 				right = mid - 1;
@@ -52,7 +53,7 @@ public class Main {
 		sb.append(left + "\n");
 	}
 	
-	public static int countBundle(int mid) {
+	public static int countBeadGroup(int mid) {
 		int group = 1;
 		int sum = 0;
 		
@@ -69,24 +70,25 @@ public class Main {
 	}
 	
 	public static void printGroupSize() {
-		int count = 0;
-		int sum = 0;
+		int beadsInGroup = 0;
+		int groupSum = 0;
+		
 		for (int i = 0; i < N; i++) {
-			sum += num[i];
+			groupSum += num[i];
 			
-			if (sum > left) {
-				M--;
-				sum = num[i];
-				sb.append(count + " ");
-				count = 1;
-			} else count++;
+			if (groupSum > left) { // 구슬의 합이 최댓값을 넘어갈 경우
+				M--; // 그룹이 만들어졌으므로 M--
+				groupSum = num[i]; // 합 초기화
+				sb.append(beadsInGroup + " "); // 현재 그룹의 구슬 수 출력
+				beadsInGroup = 1; // 구슬 수 초기화
+			} else beadsInGroup++;
 			
-			if (M == N - i) break;
+			if (M == N - i) break; // 남은 그룹 수 == 남은 구슬 수
 		}
 		
 		while (M-- > 0) {
-			sb.append(count + " ");
-			count = 1;
+			sb.append(beadsInGroup + " ");
+			beadsInGroup = 1;
 		}
 		
 		System.out.println(sb.toString());
