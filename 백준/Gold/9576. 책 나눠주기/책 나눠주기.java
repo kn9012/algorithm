@@ -1,68 +1,76 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
-
-/**
- * 백준 9576번 책 나눠주기 
- * 이분 매칭 사용
- */
+import java.util.*;
 
 public class Main {
-	public static List<Integer>[] student;
-	public static boolean[] done; // DFS에서 i번 책을 고려한 적이 있는지
-	public static int[] books; // i번째 책이 누구에게 나눠졌는지
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		int T = Integer.parseInt(br.readLine());
-		
-		for (int t = 0; t < T; t++) {
-			int answer = 0;
-			
-			st = new StringTokenizer(br.readLine());
-			int N = Integer.parseInt(st.nextToken());
-			int M = Integer.parseInt(st.nextToken());
-			
-			student = new ArrayList[M];
-			books = new int[N + 1];
-			Arrays.fill(books, -1);
-			
-			for (int i = 0; i < M; i++) {
-				student[i] = new ArrayList<>();
-				
-				st = new StringTokenizer(br.readLine());
-				int a = Integer.parseInt(st.nextToken());
-				int b = Integer.parseInt(st.nextToken());
-				
-				for (int j = a; j <= b; j++) {
-					student[i].add(j);
-				}
-			}
-			
-			for (int i = 0; i < M; i++) {
-				done = new boolean[N + 1];
-				if (dfs(i)) answer += 1;
-			}
-			
-			System.out.println(answer);
-		}
-	}
-	
-	public static boolean dfs(int x) {
-		for (int book : student[x]) {
-			if (done[book]) continue;
-			done[book] = true;
-				
-			if (books[book] == -1 || dfs(books[book])) {
-				books[book] = x;
-				return true;
-			}
-		}
-		return false;
-	}
+    public static int[] book;
+
+    public static class Student implements Comparable<Student> {
+        int a, b;
+
+        public Student(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+
+        @Override
+        public int compareTo(Student o) {
+            return Integer.compare(this.b, o.b);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+        int c = Integer.parseInt(br.readLine());
+
+        while (c-- > 0) {
+            st = new StringTokenizer(br.readLine());
+            int N = Integer.parseInt(st.nextToken());
+            int M = Integer.parseInt(st.nextToken());
+
+            book = new int[N + 2];
+            for (int i = 1; i <= N + 1; i++) book[i] = i;
+
+            Student[] students = new Student[M];
+
+            for (int i = 0; i < M; i++) {
+                st = new StringTokenizer(br.readLine());
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken());
+                students[i] = new Student(a, b);
+            }
+
+            Arrays.sort(students);
+
+            int answer = 0;
+            for (Student s : students) {
+                int book = find(s.a);
+                if (book <= s.b) {
+                    union(book, book + 1);
+                    answer++;
+                }
+            }
+
+            sb.append(answer + "\n");
+        }
+
+        System.out.println(sb);
+    }
+
+    public static int find(int n) {
+        if (book[n] == n) return book[n];
+        return book[n] = find(book[n]);
+    }
+
+    public static void union(int a, int b) {
+        a = find(a);
+        b = find(b);
+
+        if (a != b) {
+            book[find(a)] = find(b);
+        }
+    }
 }
