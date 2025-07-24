@@ -12,25 +12,15 @@ class Solution {
         Arrays.sort(A);
         Arrays.sort(B);
         
-        int left = 0; // A 인덱스
-        int right = 0; // B 인덱스
+        int aIdx = 0; // A 인덱스
+        int bIdx = 0; // B 인덱스
         
-        while (right < A.length) {
-            if (A[left] < B[right]) {
-                left++;
-                right++;
+        while (aIdx < A.length && bIdx < A.length) {
+            if (A[aIdx] < B[bIdx]) {
+                aIdx++;
                 answer++;
-            } else {
-                while (right < A.length) {
-                    if (A[left] >= B[right]) right++;
-                    else {
-                        left++;
-                        right++;
-                        answer++;
-                        break;
-                    }
-                }
             }
+            bIdx++;
         }
         
         return answer;
