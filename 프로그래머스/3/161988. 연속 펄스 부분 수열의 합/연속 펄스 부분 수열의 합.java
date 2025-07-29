@@ -1,48 +1,29 @@
 /**
  * 프로그래머스 연속 펄스 부분 수열의 합
- * - DFS 그리디?
- * 최대가 되려면 연속한 숫자들이 +, -, +...와 같이 반복되는 수열 중 가장 큰 절댓값을 가질때
- * - 그럼 오히려 투포인터일려나
+ * - DP
  */
 
 class Solution {
     public long solution(int[] sequence) {
-        long answer = 0;
+        // dp[i][0] : i번째에 곱할 값이 양수일 때
+        // dp[i][1] : i번째에 곱할 값이 음수일 때
+        long[][] dp = new long[sequence.length][2];
         
-        int[] arr1 = new int[sequence.length];
-        int[] arr2 = new int[sequence.length];
+        dp[0][0] = sequence[0];
+        dp[0][1] = -sequence[0];
         
-        for (int i = 0; i < sequence.length; i++) {
-            if (i % 2 == 0) arr1[i] = sequence[i];
-            else arr1[i] = -sequence[i];
+        long max = Math.max(dp[0][0], dp[0][1]);
+        
+        for (int i = 1; i < sequence.length; i++) {
+            // 이전에 곱하는 값이 음수여야 함
+            dp[i][0] = Math.max(sequence[i], dp[i - 1][1] + sequence[i]);
+            
+            // 이전에 곱하는 값이 양수여야 함
+            dp[i][1] = Math.max(-sequence[i], dp[i - 1][0] - sequence[i]);
+            
+            max = Math.max(max, Math.max(dp[i][0], dp[i][1]));
         }
         
-        for (int i = 0; i < sequence.length; i++) {
-            if (i % 2 == 0) arr2[i] = -sequence[i];
-            else arr2[i] = sequence[i];
-        }
-        
-        long total = 0;
-        for (int start = 0, end = 0; start < sequence.length; start++) {
-            while (total >= 0 && end < sequence.length) {
-                total += arr1[end];
-                answer = Math.max(answer, total);
-                end++;
-            }
-            total -= arr1[start];
-        }
-        
-        total = 0;
-        for (int start = 0, end = 0; start < sequence.length; start++) {
-            while (total >= 0 && end < sequence.length) {
-                total += arr2[end];
-                answer = Math.max(answer, total);
-                end++;
-            }
-            total -= arr2[start];
-        }
-        
-        
-        return answer;
+        return max;
     }
 }
