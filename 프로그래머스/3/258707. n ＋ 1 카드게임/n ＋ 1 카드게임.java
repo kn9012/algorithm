@@ -8,57 +8,77 @@
  * 최대 라운드가 될 수 있도록 진행 => dp?
  */
 
+import java.util.*;
+
 class Solution {
-    
     public int solution(int coin, int[] cards) {
         int n = cards.length;
+        int target = n + 1;
         
-        boolean[] mycards = new boolean[n];
-        boolean[] newcards = new boolean[n];
-        
-        for (int i=0; i<n/3; i++) {
-            mycards[cards[i]-1] = true;
+        // 초기 손패
+        Set<Integer> hand = new HashSet<>();
+        for (int i = 0; i < n / 3; i++) {
+            hand.add(cards[i]);
         }
-        int life = 0;
-        int templife = 0;
-        
-        for (int i=0; i<n/2; i++) {
-            if (mycards[i] && mycards[n-i-1]) life++;
+
+        // 덱
+        List<Integer> deck = new ArrayList<>();
+        for (int i = n / 3; i < n; i++) {
+            deck.add(cards[i]);
         }
-        
-        for (int i=1; i<=n/3+1; i++) {
-            if (i==n/3+1) return i;
-            
-            int card1 = cards[n/3+2*(i-1)];
-            int card2 = cards[n/3+2*(i-1)+1];
-            
-            if (mycards[n-card1] && coin>0) {
-                coin--;
-                life++;
+
+        // 사용 가능한 카드 저장 (매 라운드마다 덱에서 2장씩 추가됨)
+        List<Integer> pool = new ArrayList<>();
+
+        int round = 1;
+        for (int i = 0; i < deck.size(); i += 2) {
+            // 이번 라운드에서 새로 뽑은 카드 2장 pool에 추가
+            pool.add(deck.get(i));
+            if (i + 1 < deck.size()) pool.add(deck.get(i + 1));
+
+            // 현재 라운드에서 쌍을 만들 수 있는지 확인
+            boolean success = false;
+
+            // 1. 손 안에서 바로 만들 수 있는 경우 (코인 0)
+            for (int x : hand) {
+                if (hand.contains(target - x) && (target - x) != x) {
+                    hand.remove(x);
+                    hand.remove(target - x);
+                    success = true;
+                    break;
+                }
             }
-            if (mycards[n-card2] && coin>0) {
-                coin--;
-                life++;
+
+            // 2. 손 + pool (코인 1)
+            if (!success && coin > 0) {
+                for (int x : hand) {
+                    if (pool.contains(target - x)) {
+                        hand.remove(x);
+                        pool.remove(Integer.valueOf(target - x));
+                        coin--;
+                        success = true;
+                        break;
+                    }
+                }
             }
-            
-            if (newcards[n-card1]) templife++;
-            else newcards[card1-1] = true;
-            
-            if (newcards[n-card2]) templife++;
-            else newcards[card2-1] = true;
-            // 짝이 되는 경우가 확인되면 그 이후론 절대 짝이 등장하지 않으므로
-            // newcards에 표시할 필요도 없음
-            
-            if (life==0 && coin>=2 && templife>0) {
-                templife--;
-                coin -= 2;
-                life++;
+
+            // 3. pool + pool (코인 2)
+            if (!success && coin > 1) {
+                for (int x : pool) {
+                    if (pool.contains(target - x) && (target - x) != x) {
+                        pool.remove(Integer.valueOf(x));
+                        pool.remove(Integer.valueOf(target - x));
+                        coin -= 2;
+                        success = true;
+                        break;
+                    }
+                }
             }
-            
-            if (life==0) return i;
-            life--;
+
+            if (!success) break; // 더 이상 라운드 진행 불가
+            round++;
         }
-        return -1;
+
+        return round;
     }
-    
 }
