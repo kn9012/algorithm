@@ -1,3 +1,8 @@
+/**
+ * 프로그래머스 광고 삽입
+ * - 구간 합 + 슬라이딩 윈도우 사용
+ */
+
 class Solution {
     public String solution(String play_time, String adv_time, String[] logs) {
         int playTime = changeToSec(play_time);
@@ -52,10 +57,6 @@ class Solution {
         long min = time % 3600 / 60;
         long sec = time % 3600 % 60;
         
-        String h = (hour < 10 ? "0" + hour : hour + "");
-        String m = (min < 10 ? "0" + min : min + "");
-        String s = (sec < 10 ? "0" + sec : sec + "");
-        
-        return h + ":" + m + ":" + s;
+        return (hour < 10 ? "0" + hour : hour + "") + ":" + (min < 10 ? "0" + min : min + "") + ":" + (sec < 10 ? "0" + sec : sec + "");
     }
 }
